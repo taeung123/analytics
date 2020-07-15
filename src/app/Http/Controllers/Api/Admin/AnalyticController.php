@@ -28,8 +28,6 @@ class AnalyticController extends ApiController
         } else {
             return Period::days(7);
         }
-        // $period = $request->has('year') ?  : $request->has('month') ? Period::months($request->month) : $request->has('day') ? Period::days($request->day) :  Period::days(7);
-        // return $period;
     }
 
     public function mostVisitedPages(Request $request)
@@ -71,6 +69,7 @@ class AnalyticController extends ApiController
 
         return $analyticsData;
     }
+
     public function performQuery(Request $request)
     {
         $period = $this->extraTime($request);
