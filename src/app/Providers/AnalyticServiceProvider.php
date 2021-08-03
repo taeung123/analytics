@@ -6,8 +6,6 @@ use Illuminate\Support\ServiceProvider;
 use VCComponent\Laravel\Analytic\Repositories\AnalyticsQueryRepository;
 use VCComponent\Laravel\Analytic\Repositories\AnalyticsQueryRepositoryEloquent;
 use VCComponent\Laravel\Analytic\Entities\AnalyticsQuery;
-use VCComponent\Laravel\Analytic\Contracts\AnalyticsQueryInterface;
-use VCComponent\Laravel\Analytic\Http\Controllers\Api\Admin\AnalyticsQueryController;
 
 class AnalyticServiceProvider extends ServiceProvider
 {
@@ -34,10 +32,5 @@ class AnalyticServiceProvider extends ServiceProvider
     {
         $this->app->bind('analytics_query', AnalyticsQuery::class);
         $this->app->bind(AnalyticsQueryRepository::class, AnalyticsQueryRepositoryEloquent::class);
-        $this->registerControllers();
-    }
-    private function registerControllers()
-    {
-        $this->app->bind(AnalyticsQueryInterface::class, AnalyticsQueryController::class);
     }
 }
