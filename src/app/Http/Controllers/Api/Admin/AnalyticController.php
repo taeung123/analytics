@@ -89,4 +89,10 @@ class AnalyticController extends ApiController
 
         return response()->json($analyticsData);
     }
+    public function analyticsQuery($slug, Request $request)
+    {
+        dd('sadasd');
+
+
+    }
 }

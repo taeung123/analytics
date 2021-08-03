@@ -3,6 +3,11 @@
 namespace VCComponent\Laravel\Analytic\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use VCComponent\Laravel\Analytic\Repositories\AnalyticsQueryRepository;
+use VCComponent\Laravel\Analytic\Repositories\AnalyticsQueryRepositoryEloquent;
+use VCComponent\Laravel\Analytic\Entities\AnalyticsQuery;
+use VCComponent\Laravel\Analytic\Contracts\AnalyticsQueryInterface;
+use VCComponent\Laravel\Analytic\Http\Controllers\Api\Admin\AnalyticsQueryController;
 
 class AnalyticServiceProvider extends ServiceProvider
 {
@@ -15,6 +20,9 @@ class AnalyticServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
+        $this->publishes([
+            __DIR__ . '/../../database/seeds/AnalyticsQuerySeeder.php'  => base_path('/database/seeds/AnalyticsQuerySeeder.php'),
+        ]);
     }
 
     /**
@@ -24,6 +32,12 @@ class AnalyticServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->app->bind('analytics_query', AnalyticsQuery::class);
+        $this->app->bind(AnalyticsQueryRepository::class, AnalyticsQueryRepositoryEloquent::class);
+        $this->registerControllers();
+    }
+    private function registerControllers()
+    {
+        $this->app->bind(AnalyticsQueryInterface::class, AnalyticsQueryController::class);
     }
 }
