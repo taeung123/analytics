@@ -19,7 +19,7 @@ class AnalyticServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
         $this->publishes([
-            __DIR__ . '/../../config/analytics_query.php' => config_path('analytics_query.php'),
+            __DIR__ . '/../../config/analytic.php' => config_path('analytic.php'),
             __DIR__ . '/../../database/seeds/AnalyticsQuerySeeder.php'  => base_path('/database/seeds/AnalyticsQuerySeeder.php'),
         ]);
     }
