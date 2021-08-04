@@ -4,7 +4,7 @@ namespace VCComponent\Laravel\Analytics\Transformers;
 
 use League\Fractal\TransformerAbstract;
 
-class AnalyticsQueryTransformer extends TransformerAbstract
+class AnalyticsQueryValueTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [];
 
@@ -16,8 +16,7 @@ class AnalyticsQueryTransformer extends TransformerAbstract
     public function transform($model)
     {
         return [
-            "slug"      => $model->slug,
-            "query"     => $model->query,
+            "value"      => $model->value,
         ];
     }
 }
