@@ -16,7 +16,8 @@ class AnalyticsQueryValueTransformer extends TransformerAbstract
     public function transform($model)
     {
         return [
-            "value"      => $model->value,
+            "value" => $model->value,
+            "date" =>  $model->date,
         ];
     }
 }

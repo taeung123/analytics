@@ -14,6 +14,7 @@ class AnalyticsQuery extends Model implements Transformable
     use TransformableTrait;
     protected $table = 'analytics_query';
     protected $fillable = [
+        'type',
         'slug',
         'query'
     ];

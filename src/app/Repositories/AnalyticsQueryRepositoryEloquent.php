@@ -50,10 +50,10 @@ class AnalyticsQueryRepositoryEloquent extends BaseRepository implements Analyti
      * @param int $id
      * @return self
      */
-    public function findBySlug($field)
+    public function findBySlug($type, $slug)
     {
         try {
-            return $this->model->where('slug', $field)->first();
+            return $this->model->where('slug', $slug)->where('type', $type)->first();
         } catch (Exception $e) {
             throw new NotFoundException('data not found');
         }
