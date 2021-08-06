@@ -6,15 +6,18 @@ use Exception;
 use Illuminate\Http\Request;
 use VCComponent\Laravel\Analytics\Entities\AnalyticsQuery;
 use VCComponent\Laravel\Analytics\Entities\AnalyticQueryValue;
+use VCComponent\Laravel\Analytics\Entities\AnalyticQueryProductValue;
 use VCComponent\Laravel\Analytics\Transformers\AnalyticsQueryTransformer;
 use VCComponent\Laravel\Analytics\Transformers\AnalyticsQueryValueTransformer;
+use VCComponent\Laravel\Analytics\Transformers\AnalyticsQueryProductValueTransformer;
 use VCComponent\Laravel\Vicoders\Core\Controllers\ApiController;
 use VCComponent\Laravel\Analytic\Repositories\AnalyticsQueryRepository;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use VCComponent\Laravel\Analytic\Validators\AnaliticsQueryValidator;
+
 class AnalyticsQueryController extends ApiController
 {
-    public function __construct(AnalyticsQueryRepository $repository, Request $request)
+    public function __construct(AnalyticsQueryRepository $repository, AnaliticsQueryValidator $validator)
     {
         $this->repository  = $repository;
         $this->entity      =  $repository->getEntity();
@@ -25,6 +28,7 @@ class AnalyticsQueryController extends ApiController
             );
         }
         $this->transformer = AnalyticsQueryTransformer::class;
+        $this->validator   = $validator;
     }
 
     public function analyticsQuery($slug)
@@ -37,20 +41,24 @@ class AnalyticsQueryController extends ApiController
     }
     public function chartAnalyticsQuery(Request $request, $slug)
     {
-        $data = $this->repository->FindBySlug('chart', $slug);
-        if ($request->has('from_date')) {
-            if ($request->has('to_date')) {
-                $trans = [":from" =>"'" .$request->from_date."'", ':to' => "'".$request->to_date."'"];
-            } else {
-                $trans = [':from' => "'" .$request->from_date."'", ':to' => "'" . date('Y-m-d') ."'"];
-            }
-            $tring_query = strtr($data->query, $trans);
-            $query = DB::select($tring_query);
+        $this->validator->isValid($request, 'RULE_ADMIN_REQUEST');
+        $data = $this->repository->findBySlug('chart', $slug);
+        $trans = [":from" => "'" . $request->from_date . "'", ':to' => "'" . $request->to_date . "'"];
+        $tring_query = strtr($data->query, $trans);
+        $query = DB::select($tring_query);
+        if ($slug == "best_selling_product") {
+
+            $value = collect($query)->map(function ($item) {
+                return new AnalyticQueryProductValue($item->value, $item->date, $item->id_product, $item->name_product);
+            });
+            $response = $this->response->collection($value, new AnalyticsQueryProductValueTransformer());
+        } else {
             $value = collect($query)->map(function ($item) {
                 return new AnalyticQueryValue($item->value, $item->date);
             });
             $response = $this->response->collection($value, new AnalyticsQueryValueTransformer());
-            return $response;
         }
+
+        return $response;
     }
 }
