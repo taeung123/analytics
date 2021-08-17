@@ -20,6 +20,8 @@ class AnalyticsQueryProductValueTransformer extends TransformerAbstract
             "date" =>  $model->date,
             "id_product" => $model->id_product,
             "name_product" => $model->name_product,
+            "thumbnail_product" => $model->thumbnail_product,
+            "desc_product" => $model->desc_product,
         ];
     }
 }

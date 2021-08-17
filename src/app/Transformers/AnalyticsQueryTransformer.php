@@ -17,6 +17,7 @@ class AnalyticsQueryTransformer extends TransformerAbstract
     {
         return [
             'type'      => $model->type,
+            'date_type' => $model->date_type,
             "slug"      => $model->slug,
             "query"     => $model->query,
         ];

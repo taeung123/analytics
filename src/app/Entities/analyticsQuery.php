@@ -15,6 +15,7 @@ class AnalyticsQuery extends Model implements Transformable
     protected $table = 'analytics_query';
     protected $fillable = [
         'type',
+        'date_type',
         'slug',
         'query'
     ];

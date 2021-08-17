@@ -33,7 +33,7 @@ class AnalyticsQueryController extends ApiController
 
     public function analyticsQuery($slug)
     {
-        $data = $this->repository->FindBySlug('widget', $slug);
+        $data = $this->repository->findBySlug('widget','', $slug);
         $query = DB::select($data->query);
         $value = new AnalyticQueryValue($query[0]->value, '');
         $response = $this->response->item($value, new AnalyticsQueryValueTransformer());
@@ -42,14 +42,14 @@ class AnalyticsQueryController extends ApiController
     public function chartAnalyticsQuery(Request $request, $slug)
     {
         $this->validator->isValid($request, 'RULE_ADMIN_REQUEST');
-        $data = $this->repository->findBySlug('chart', $slug);
+        $data = $this->repository->findBySlug('chart', $request->date_type, $slug);
         $trans = [":from" => "'" . $request->from_date . "'", ':to' => "'" . $request->to_date . "'"];
         $tring_query = strtr($data->query, $trans);
         $query = DB::select($tring_query);
         if ($slug == "best_selling_product") {
 
             $value = collect($query)->map(function ($item) {
-                return new AnalyticQueryProductValue($item->value, $item->date, $item->id_product, $item->name_product);
+                return new AnalyticQueryProductValue($item->value, $item->date, $item->id_product, $item->name_product, $item->thumbnail_product, $item->desc_product);
             });
             $response = $this->response->collection($value, new AnalyticsQueryProductValueTransformer());
         } else {

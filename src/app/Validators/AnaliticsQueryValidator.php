@@ -10,6 +10,7 @@ class AnaliticsQueryValidator extends AbstractValidator
         'RULE_ADMIN_REQUEST' => [
             'from_date' => ['required'],
             'to_date'   => ['required'],
+            'date_type' => ['required'],
         ]
     ];
 }
