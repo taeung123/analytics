@@ -15,6 +15,15 @@ class AnalyticController extends ApiController
     {
         $this->analytics   = $analytics;
         $this->transformer = AnalyticTransformer::class;
+        if (config('analytics_query.auth_middleware.admin.middleware') !== '') {
+            $this->middleware(
+                config('analytics_query.auth_middleware.admin.middleware'),
+                ['except' => config('analytics_query.auth_middleware.admin.except')]
+            );
+        }
+        else {
+            throw new Exception("Admin middleware configuration is required");
+        }
     }
 
     public function extraTime($request)

@@ -27,6 +27,9 @@ class AnalyticsQueryController extends ApiController
                 ['except' => config('analytics_query.auth_middleware.admin.except')]
             );
         }
+        else {
+            throw new Exception("Admin middleware configuration is required");
+        }
         $this->transformer = AnalyticsQueryTransformer::class;
         $this->validator   = $validator;
     }
